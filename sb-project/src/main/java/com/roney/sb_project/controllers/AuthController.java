@@ -2,8 +2,10 @@ package com.roney.sb_project.controllers;
 
 import com.roney.sb_project.dto.AuthRequest;
 import com.roney.sb_project.dto.AuthResponse;
+import com.roney.sb_project.dto.ProductDto;
 import com.roney.sb_project.security.JwtUtil;
 import com.roney.sb_project.security.MyUserDetailsService;
+import com.roney.sb_project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +16,18 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.core.AuthenticationException; // ✅ correct
 
+import java.util.Collections;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("api/public")
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -45,5 +53,16 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         final String token = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthResponse(token));
+    }
+
+    @GetMapping("/product/search")
+    public ResponseEntity<?> searchProducts(@RequestParam(required = false) String keyword){
+        if(keyword == null || keyword.trim().isEmpty()){
+            System.out.println(keyword);
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "No Keyword Found"));
+        }
+
+        List<ProductDto> result = productService.search(keyword);
+        return ResponseEntity.ok(result);
     }
 }
