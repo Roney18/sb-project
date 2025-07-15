@@ -58,7 +58,7 @@ public class AuthController {
     @GetMapping("/product/search")
     public ResponseEntity<?> searchProducts(@RequestParam(required = false) String keyword){
         if(keyword == null || keyword.trim().isEmpty()){
-            System.out.println(keyword);
+//            System.out.println(keyword);
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", "No Keyword Found"));
         }
 

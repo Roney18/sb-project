@@ -1,5 +1,6 @@
 package com.roney.sb_project.service;
 
+import com.roney.sb_project.dto.CategoryDto;
 import com.roney.sb_project.dto.ProductDto;
 import com.roney.sb_project.model.Product;
 import com.roney.sb_project.repo.ProductRepo;
@@ -24,7 +25,7 @@ public class ProductService {
                 .map(p -> new ProductDto(p.getProductId(),
                         p.getProductName(),
                         p.getPrice(),
-                        p.getCategory().getCategoryName()))
+                        new CategoryDto(p.getCategory().getCategoryName())))
                 .collect(Collectors.toList());
     }
 }
