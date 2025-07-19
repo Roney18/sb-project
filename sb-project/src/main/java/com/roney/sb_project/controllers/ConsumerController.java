@@ -48,4 +48,10 @@ public class ConsumerController {
             return ResponseEntity.status(409).build();
         }
     }
+
+    @DeleteMapping("/consumer/cart")
+    public ResponseEntity<?> deleteCart(@AuthenticationPrincipal UserDetails userDetails,@RequestBody Product product){
+        String username = userDetails.getUsername();
+        return consumerService.deleteCart(username,product);
+    }
 }

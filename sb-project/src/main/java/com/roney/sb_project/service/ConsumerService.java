@@ -130,4 +130,32 @@ public class ConsumerService {
 
 
     }
+
+    public ResponseEntity<?> deleteCart(String username, Product product) {
+        User user = userRepo.findByUsername(username);
+        Cart cart = cartRepo.findByUserUsername(username);
+
+        if(cart == null){
+            return ResponseEntity.ok().build();
+        }
+
+        CartProduct cartProduct = cart.getCartProducts().stream()
+                .filter(cp->cp.getProduct().getProductId().equals(product.getProductId()))
+                .findFirst()
+                .orElse(null);
+
+        if(cartProduct==null){
+            return ResponseEntity.ok().build();
+        }
+        else{
+            try{
+                cartProductRepo.deleteByCartByUserUserIdAndProductProductId(user.getUserId(),product.getProductId());
+                return ResponseEntity.ok().build();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+    }
 }
