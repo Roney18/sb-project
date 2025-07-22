@@ -9,4 +9,6 @@ public interface CategoryRepo extends JpaRepository<Category,Integer> {
 
 
     Category findByCategoryName(String categoryName);
+
+    void deleteByProduct_ProductId(int productId);
 }
